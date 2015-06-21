@@ -4,7 +4,7 @@ import numpy as np
 
 def is_transition_matrix(P):
 	"""
-	Compute the pcca of a transition matrix
+	Test if a matrix is a transition one or not
 	
 	Parameters
 	----------
@@ -22,6 +22,12 @@ def is_transition_matrix(P):
 		return True
 	except:
 		return False
+
+def is_irreducible(P):
+	"""
+	Check if a matrix is irreducible
+	"""
+	return len(communication_classes(P)) == 1
 
 def depth_first_search(M, node, node_list, visited_nodes=None):
 	"""
@@ -102,10 +108,3 @@ def communication_classes(P):
 		node_list = [x for x in node_list if x not in comm_class]
 
 	return communication_classes
-
-
-def is_irreducible(P):
-	"""
-	Check if a matrix is irreducible
-	"""
-	return len(communication_classes(P)) == 1
