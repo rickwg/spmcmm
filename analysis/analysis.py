@@ -67,11 +67,13 @@ class TPT():
 		self.probaCurrent = None
 		self.effectiveProbaCurrent = None
 		self.transitionRate = None
-		self.meanPassageTime = None
+		self.meanFirstPassageTime = None
+		self.statDist = None
 
 	def forwardCommittor(self):
 		from scipy.linalg import solve
 		'''
+		Compute and return the forward committor
 		Conditions ruling the forward committor:
 							left part : G			right part : d
 		if i not in AUB : 	sum_{j} L_{ij}*q_{j} 	= 0
@@ -101,6 +103,7 @@ class TPT():
 	def backwardCommittor(self):
 		from scipy.linalg import solve
 		'''
+		Compute and return the backward committor
 		Conditions ruling the backward committor:
 							left part : G			right part : d
 		if i not in AUB : 	sum_{j} L_{ij}*q_{j} 	= 0
@@ -126,3 +129,76 @@ class TPT():
 		#solve the equation
 		self.backwardCommit = solve(G,d)
 		return self.backwardCommit
+
+	def probabilityCurrent(self):
+		'''
+		Compute and return the probability current
+		'''
+
+		# create a zero diagonal that will put to zero all the i==j cases
+		probaCurrent_ii = np.ones(self.T.shape)-np.eye(self.T.shape)
+		
+		# compute stationnary distribution
+		self.statDist = MarkovModel(self.T).statDistribution()
+
+		picucu = np.kron(self.statDist*self.backwardCommit, self.forwardCommit)
+		self.probaCurrent = np.dot(picucu.reshape(self.T.shape)*self.T, probaCurrent_ii)
+		return self.probaCurrent
+
+	def effectiveProbabilityCurrent(self):
+		'''
+		Compute and return the effective probability current
+		'''
+
+		# initialise effective probability current
+		self.effectiveProbaCurrent = np.zeros(self.T.shape)
+
+		# indices of where probability current [i,j] > probability current [j,i]
+		indSup = np.where(self.probaCurrent > np.array(self.probaCurrent).T)
+		# indices of where probability current [i,j] < probability current [j,i]
+		indInf = np.where(self.probaCurrent < np.array(self.probaCurrent).T)
+
+		for i in indSup:
+			self.effectiveProbaCurrent[i] = self.probaCurrent[i] - self.probaCurrent[i[::-1]]
+			self.effectiveProbaCurrent[i[::-1]] = 0
+		for i in indInf:
+			self.effectiveProbaCurrent[i] = 0
+			self.effectiveProbaCurrent[i[::-1]] = self.probaCurrent[i[::-1]] - self.probaCurrent[i]
+		return self.effectiveProbaCurrent
+
+	def flux(self):
+		'''
+		Compute and return the flux = "Average total number of trajectories from A to B per time unit"
+		'''
+		self.flux = np.sum([np.sum(self.probabilityCurrent[x]) for x in self.a])
+		return self.flux
+
+	def transitionRate(self):
+		'''
+		Compute and return the transition rate = (Flux)/(Total number of trajectories going forward from A)
+		'''
+		self.transitionRate = self.flux/np.sum(self.statDist*self.backwardCommit)
+		return self.transitionRate
+
+	def meanFirstPassageTime(self):
+		'''
+		Compute and return the mean first passage time = inverse of transition rate
+		'''
+		self.meanFirstPassageTime = self.transitionRate**(-1)
+		return self.meanFirstPassageTime
+
+	def minCurrent(self,w):
+		'''
+		Compute and return the min-current (capacity) of a pathway w
+		'''
+		from itertools import product
+		try:
+			assert w[0] in self.a
+			assert w[-1] in self.b
+			for j in w[1:-2]:
+				assert w[j] not in np.union1d(self.a, self.b)
+		except Exception, e:
+			raise TypeError('w is not a pathway')
+		# all possible indices for all i,j in w
+		indices = product(w, repeat = 2)
+		return np.min([self.effectiveProbaCurrent[i] for i in indices])
