@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 class kMeans:
 	def __init__(self, X, k):
@@ -51,7 +52,7 @@ class kMeans:
                 #for each sample,do the iteration until find the minimal distance to all k centers
                 #label each sample using the index of the center which is nearest to it.
 				for j in range(self.k):
-					dist = np.linalg.norm(self.centers[j, :], X[i, :])
+					dist = np.linalg.norm(self.centers[j, :]-X[i, :])
 					if dist < dmin:
 						dmin = dist
 						minIdx = j
@@ -66,10 +67,17 @@ class kMeans:
 				self.centers[i, :] = np.mean(pointsInCluster, axis=0)
 
 
+X = np.array(((1,5),(3,2),(1,9),(-1,3),(0,5),(7,8)))
+k = 2
 
 cluster = kMeans(X, k)
 cluster.discretize(X)
-print cluster.get_centers()
+#print cluster.get_centers()
+#print X
+print cluster.get_labels()
 
 
-
+plt.plot(X[:,0],X[:,1], 'ro')
+plt.plot(cluster.get_centers()[:,0],cluster.get_centers()[:,1], 'bo')
+plt.axis([-2, 10, -2, 10])
+plt.show()
