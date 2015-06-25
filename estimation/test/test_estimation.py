@@ -21,6 +21,6 @@ def test_est_trans_matrix():
     trans_mat = np.array([[0, 1, 0], [0, 0, 1], [1, 0, 0]], dtype=np.intc)
     chain = nsampl.evolve_chain(0, trans_mat, 10)
     count_mat = est.compute_count_matrix(chain)
-    est_trans_mat = est.estimate_transition_matrix(count_mat)
+    est_trans_mat = est.estimate_transition_matrix_naiv(count_mat)
 
     assert_true(est_trans_mat == trans_mat)
