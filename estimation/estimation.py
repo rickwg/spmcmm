@@ -24,7 +24,7 @@ def compute_count_matrix(i_chain):
     return count_matrix
 
 
-def estimate_transition_matrix_naiv(i_count_mat):
+def estimate_transition_matrix_naive(i_count_mat):
     """
     Estimate transition matrix
 
