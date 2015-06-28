@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.linalg as lina
 
 
 def compute_count_matrix(i_chain):
@@ -44,7 +45,7 @@ def estimate_transition_matrix_naive(i_count_mat):
         est_trans_mat[i, :] = np.float64(row) / np.sum(np.float64(row))
     return est_trans_mat
 
-def estimate_transition_matrix(i_count_mat, i_x0, i_max_iter, i_tol):
+def estimate_transition_matrix(i_count_mat, i_max_iter, i_tol):
     """
     Estimate transition matrix with detailed balance condition
 
@@ -61,26 +62,41 @@ def estimate_transition_matrix(i_count_mat, i_x0, i_max_iter, i_tol):
     """
     n = i_count_mat.shape[0]
     numerator = i_count_mat + i_count_mat.T
-    count_mat_row_sum = np.sum(i_count_mat, axis=1)
-    count_mat_col_sum = np.sum(i_count_mat, axis=0)
-    x = i_x0
-    iterations = 0
-    denominator = np.zeros(x.shape)
 
-    while iter < i_max_iter:
+    non_zero_idx = (0 != numerator)
+    count_mat_row_sum = np.sum(i_count_mat, axis=1)
+
+    # compute naive transition matrix T_ij = c_ij / sum_j c_ij
+    # and stationary distribution
+    T_temp = estimate_transition_matrix_naive(i_count_mat)
+    eval, evec_left, evec_right = lina.eig(T_temp, left=True)
+
+    # sort eigenvalues descending
+    idx = eval.argsort()[::-1]
+    stationary_dist = evec_left[:, idx[0]].real
+
+    # compute initial value x0
+    x0 = np.dot(np.diag(stationary_dist), T_temp)
+
+    x = x0.copy()
+    del x0
+    del T_temp
+
+    it = 0
+    denominator = np.zeros(x.shape, dtype=np.float64)
+
+    while it < i_max_iter:
         x_row_sum = np.sum(x, axis=1)
-        # x_col_sum = np.sum(x, axis=0)
 
         # q_i = c_i / x_i
         q_i = count_mat_row_sum / x_row_sum
-        q_j = count_mat_col_sum / x_row_sum
 
         for i in xrange(n):
             for j in xrange(n):
-                denominator[i, j] = q_i[i] + q_j[j]
-        x = numerator / denominator
+                denominator[i, j] = q_i[i] + q_i[j]
+        x[non_zero_idx] = numerator[non_zero_idx] / denominator[non_zero_idx]
 
-        iterations += 1
+        it += 1
 
     est_trans_mat = x / np.sum(x, axis=1)
     return est_trans_mat
