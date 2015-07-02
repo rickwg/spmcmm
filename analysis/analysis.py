@@ -11,7 +11,7 @@ class MarkovModel():
 			assert self.is_transition_matrix()
 			assert type(self.T) == np.ndarray
 		except Exception, e:
-			raise e
+			print e
 		
 		self.lagtime = float(lagtime)
 		self.timeScales = None
@@ -73,7 +73,7 @@ class MarkovModel():
 		vector of the stationnary distribution 
 		'''
 		eigVal, eigVec = np.linalg.eig(self.T)
-		self.statDist = eigVec[np.where(eigVal==1)]
+		self.statDist = eigVec[np.where(np.isclose(eigVal,1))]
 		return self.statDist
 
 	def timescales(self):
@@ -90,7 +90,7 @@ class MarkovModel():
 
 		for j in range(len(realEigVal)):
 			# Take care : ZeroDivisionError
-			if np.isclose(realEigVal[j]-1.)**2,0):
+			if np.isclose((realEigVal[j]-1.)**2,0):
 				self.timeScales[j] = np.inf
 			else:
 				self.timeScales[j] = -self.lagtime / np.log(np.absolute(realEigVal[j]))
