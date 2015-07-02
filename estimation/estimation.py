@@ -65,9 +65,39 @@ def estimate_transition_matrix_naive(i_count_mat):
         est_trans_mat[i, :] = np.float64(row) / np.sum(np.float64(row))
     return est_trans_mat
 
+def compute_init_value(i_count_mat):
+    """
+    Helper function. Computes a initial value for estimation of
+    transition matrix
+
+    Parameters
+    ----------
+    i_count_mat : numpy.array
+
+    Returns
+    -------
+    est_trans_mat : numpy.array
+
+    """
+    # compute naive transition matrix T_ij = c_ij / sum_j c_ij
+    # and stationary distribution
+    T_temp = estimate_transition_matrix_naive(i_count_mat)
+    eval, evec_left, evec_right = lina.eig(T_temp, left=True)
+
+    # sort eigenvalues descending
+    idx = eval.argsort()[::-1]
+    stationary_dist = evec_left[:, idx[0]].real
+
+    # compute initial value x0
+    x0 = np.dot(np.diag(stationary_dist), T_temp)
+    del T_temp
+
+    return x0
+
 def estimate_transition_matrix(i_count_mat, i_max_iter, i_tol):
     """
-    Estimate transition matrix with detailed balance condition
+    Estimate transition matrix with detailed balance condition,
+    i.e for reversible transition matrices
 
     Parameters
     ----------
@@ -86,21 +116,11 @@ def estimate_transition_matrix(i_count_mat, i_max_iter, i_tol):
     non_zero_idx = (0 != numerator)
     count_mat_row_sum = np.sum(i_count_mat, axis=1)
 
-    # compute naive transition matrix T_ij = c_ij / sum_j c_ij
-    # and stationary distribution
-    T_temp = estimate_transition_matrix_naive(i_count_mat)
-    eval, evec_left, evec_right = lina.eig(T_temp, left=True)
-
-    # sort eigenvalues descending
-    idx = eval.argsort()[::-1]
-    stationary_dist = evec_left[:, idx[0]].real
-
     # compute initial value x0
-    x0 = np.dot(np.diag(stationary_dist), T_temp)
+    x0 = compute_init_value(i_count_mat)
 
     x = x0.copy()
     del x0
-    del T_temp
 
     it = 0
     denominator = np.zeros(x.shape, dtype=np.float64)
