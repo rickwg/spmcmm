@@ -2,7 +2,7 @@ import numpy as np
 import scipy.linalg as lina
 
 
-def compute_count_matrix(i_chain):
+def compute_count_matrix(i_chain, i_tau):
     """
     Compute count matrix of a markov chain
 
@@ -20,8 +20,8 @@ def compute_count_matrix(i_chain):
     n_states = i_chain.max() + 1
     count_matrix = np.zeros((n_states, n_states), dtype=np.intc)
 
-    for i in xrange(1, i_chain.shape[0]):
-        count_matrix[i_chain[i - 1], i_chain[i]] += 1
+    for i in xrange(i_tau, i_chain.shape[0]):
+        count_matrix[i_chain[i - i_tau], i_chain[i]] += 1
     return count_matrix
 
 
