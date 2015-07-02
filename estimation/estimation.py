@@ -2,7 +2,7 @@ import numpy as np
 import scipy.linalg as lina
 
 
-def compute_count_matrix(i_chain, i_tau):
+def compute_count_matrix(i_chain, i_tau=1):
     """
     Compute count matrix of a markov chain
 
