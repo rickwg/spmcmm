@@ -24,6 +24,26 @@ def compute_count_matrix(i_chain, i_tau=1):
         count_matrix[i_chain[i - i_tau], i_chain[i]] += 1
     return count_matrix
 
+def compute_count_matrix_list(i_chain_list, i_tau=1):
+    """
+    Compute count matrix of a list of markov chains
+
+    Parameters
+    ----------
+    i_chain_list : numpy.array that contains a discrete markov chain
+
+    Returns
+    -------
+    count_matrix : numpy.array
+
+    """
+    n_states = i_chain_list.max() + 1
+    count_matrix = np.zeros((n_states, n_states), dtype=np.intc)
+
+    for i in xrange(i_chain_list.shape[0]):
+        count_matrix += compute_count_matrix(i_chain_list[i, :], i_tau)
+    return count_matrix
+
 
 def estimate_transition_matrix_naive(i_count_mat):
     """
