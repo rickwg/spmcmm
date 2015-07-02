@@ -30,18 +30,25 @@ def compute_count_matrix_list(i_chain_list, i_tau=1):
 
     Parameters
     ----------
-    i_chain_list : numpy.array that contains a discrete markov chain
+    i_chain_list : list of numpy.arrays which contains discrete markov chains
 
     Returns
     -------
     count_matrix : numpy.array
 
     """
-    n_states = i_chain_list.max() + 1
+    len_chain = len(i_chain_list)
+    max_num = 0
+    for i in xrange(len_chain):
+        temp_max = i_chain_list[i].max()
+        if max_num < temp_max:
+            max_num = temp_max
+
+    n_states = max_num + 1
     count_matrix = np.zeros((n_states, n_states), dtype=np.intc)
 
-    for i in xrange(i_chain_list.shape[0]):
-        count_matrix += compute_count_matrix(i_chain_list[i, :], i_tau)
+    for i in xrange(len_chain):
+        count_matrix += compute_count_matrix(i_chain_list[i], i_tau)
     return count_matrix
 
 
