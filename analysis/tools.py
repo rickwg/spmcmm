@@ -2,33 +2,6 @@
 
 import numpy as np
 
-def is_transition_matrix(P):
-	"""
-	Test if a matrix is a transition one or not
-	
-	Parameters
-	----------
-	P : (nxn) ndarray
-	transition matrix
-
-	Returns
-	-------
-	bool : 	True if the matrix is a transition matrix
-			False either
-	"""
-	try:
-		#sum of all the lines must be one
-		assert np.sum(P, axis=1) == [1]*P.shape[0]
-		return True
-	except:
-		return False
-
-def is_irreducible(P):
-	"""
-	Check if a matrix is irreducible
-	"""
-	return len(communication_classes(P)) == 1
-
 def depth_first_search(M, node, node_list, visited_nodes=None):
 	"""
 	Perform depth first search algorithm
@@ -49,13 +22,13 @@ def depth_first_search(M, node, node_list, visited_nodes=None):
 	# mark the current vertex as visited
 	visited_nodes.add(node)
 
-	adjacent_nodes = set(np.where(M.T[node, :] > 0.)[0].tolist())
-	adjacent_nodes.discard(node)
+	adjacentNodes = set(np.where(M.T[node, :] > 0.)[0].tolist())
+	adjacentNodes.discard(node)
 
-	for recursive_node in adjacent_nodes:
+	for recursNode in adjacentNodes:
 		# explore adjacent vertex that are not visited yet
-		if recursive_node not in visited_nodes:
-			depth_first_search(M, recursive_node, node_list, visited_nodes)
+		if recursNode not in visited_nodes:
+			depth_first_search(M, recursNode, node_list, visited_nodes)
 
 	if node not in node_list:
 		node_list.append(node)

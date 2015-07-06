@@ -1,15 +1,46 @@
 #!/usr/bin/python
 
 import numpy as np
-import algebra as al
-import pcca
-from tools import is_irreducible, communication_classes, depth_first_search, is_transition_matrix
-
+from tools import communication_classes, depth_first_search
 
 class MarkovModel():
+	def __init__(self, T, lagtime = 1.):
+
+		self.T = T
+		try:
+			assert self.is_transition_matrix()
+			assert type(self.T) == np.ndarray
+		except Exception, e:
+			print e
+		
+		self.lagtime = float(lagtime)
+		self.timeScales = None
+		self.statDist = None
+		self.eigVal = None
+		self.eigVec = None
+		self.pcca = None
+
+	def is_transition_matrix(self):
+		'''
+		Check if the given matrix is a transition matrix
+		'''
+		try:
+			assert len(self.T.shape) == 2				# 2D matrix
+			assert self.T.shape[0] == self.T.shape[1]	# Square matrix
+			assert (self.T >= 0).all()					# All positive
+			assert np.sum(P, axis=1) == [1]*P.shape[0]	# Sum of rows = 1
+			return True
+		except:
+			return False
+
+	def is_irreducible(self):
+		'''
+		Check if a matrix is irreducible
+		'''
+		return len(communication_classes(self.T)) == 1
 
 	def eigenVectors(self):
-		"""
+		'''
 		Compute the eigen values and eigen vectors 
 		of a transition matrix P and sort them from the biggest 
 		eigen value to the smallest.
@@ -21,29 +52,57 @@ class MarkovModel():
 		eig_val : (N) list of eigen values
 		eig_vec : (NxN) ndarray
 		array of eigen vectors 
-		"""
+		'''
 		#take eigen values & eigen vectors from P
-		eig_val, eig_vect = np.linalg.eig(self.T)
+		eigVal, eigVec = np.linalg.eig(self.T)
 
 		#sort decreasingly the eigen vectors with respect to the eigen values
-		eig_val, eig_vect = zip(*sorted(zip(*[eig_val,eig_vect]), reverse=True))
+		self.eigVal, self.eigVec = zip(*sorted(zip(*[eigVal,eigVec]), reverse=True))
 
-		return eig_val, eig_vect
+		return self.eigVal, self.eigVec
 
 
 	def statDistribution(self):
-		"""
-		Compute the statistical distribution of a 
-		transition matrix P
+		'''
+		Compute and return the statistical distribution of a 
+		transition matrix T
 		
 		Returns
 		-------
-		stat_dist : (N) list
+		statDist : (N) list
 		vector of the stationnary distribution 
-		"""
-		eig_val, eig_vect = np.linalg.eig(self.T)
-		stat_dist = eig_vect[np.where(eig_val==1)]
-		return stat_dist
+		'''
+		eigVal, eigVec = np.linalg.eig(self.T)
+		self.statDist = eigVec[np.where(np.isclose(eigVal,1))]
+		return self.statDist
+
+	def timescales(self):
+		'''
+		Compute and return the time scales of a transition matrix T
+		lagtime = 1. default
+
+		Returns
+		-------
+		timeScales
+		'''
+		realEigVal = np.real(self.eigVal)
+		self.timeScales = np.zeros(realEigVal.shape)
+
+		for j in range(len(realEigVal)):
+			# Take care : ZeroDivisionError
+			if np.isclose((realEigVal[j]-1.)**2,0):
+				self.timeScales[j] = np.inf
+			else:
+				self.timeScales[j] = -self.lagtime / np.log(np.absolute(realEigVal[j]))
+		return self.timeScales
+
+
+	def pcca(self, m):
+		'''Use pyemma pcca '''
+		import pcca as pyemma_pcca
+		self.pcca = pyemma_pcca(self.T, m)
+		return self.pcca
+
 
 class TPT():
 	def __init__(self, T, a, b):
