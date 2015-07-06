@@ -173,6 +173,6 @@ def check_reversibility(i_trans_mat):
     S = np.dot(np.diag(stationary_dist), i_trans_mat)
 
     check = np.allclose(S, S.T, atol=1e-5)
-    return check
+    return check, S
 
 
