@@ -151,3 +151,28 @@ def estimate_transition_matrix(i_count_mat, i_max_iter, i_tol):
     est_trans_mat = x / np.sum(x, axis=1)[:, np.newaxis]
     return est_trans_mat
 
+def check_reversibility(i_trans_mat):
+    """
+    Estimate transition matrix with detailed balance condition,
+    i.e for reversible transition matrices
+
+    Parameters
+    ----------
+    i_trans_mat : numpy.array, estimated transition matrix (hopefully reversible)
+
+    Returns
+    -------
+    check : bool
+    """
+    val, evec_left, evec_right = lina.eig(i_trans_mat, left=True)
+
+    # sort eigenvalues descending
+    idx = eval.argsort()[::-1]
+    stationary_dist = evec_left[:, idx[0]].real
+
+    S = np.dot(np.diag(stationary_dist), i_trans_mat)
+
+    check = np.allclose(S, S.T, atol=1e-5)
+    return check
+
+
