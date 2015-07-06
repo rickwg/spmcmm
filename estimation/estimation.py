@@ -164,7 +164,7 @@ def check_reversibility(i_trans_mat):
     -------
     check : bool
     """
-    val, evec_left, evec_right = lina.eig(i_trans_mat, left=True)
+    eval, evec_left, evec_right = lina.eig(i_trans_mat, left=True)
 
     # sort eigenvalues descending
     idx = eval.argsort()[::-1]
