@@ -30,4 +30,6 @@ class SimpleDataImporter:
         :returns: Return a numpy array.
         :rtype: numpy.array()
         """
-        return self._data
+        # reshape for k-means module
+        data = self._data.reshape(self._data.size, 1)
+        return data
