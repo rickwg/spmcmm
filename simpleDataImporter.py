@@ -20,6 +20,10 @@ class SimpleDataImporter:
         """
         try:
             self._data = np.loadtxt(i_file_name, delimiter=i_delimiter)
+            # reshape for k-means
+            if 1 == len(self._data.shape):
+                self._data = self._data.reshape(self._data.size, 1)
+
         except IOError as ioErr:
             print 'cannot open file: {}'.format(ioErr, i_file_name)
 
@@ -30,6 +34,4 @@ class SimpleDataImporter:
         :returns: Return a numpy array.
         :rtype: numpy.array()
         """
-        # reshape for k-means module
-        data = self._data.reshape(self._data.size, 1)
-        return data
+        return self._data
