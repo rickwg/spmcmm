@@ -1,10 +1,9 @@
+import numpy as np
 
 from nose.tools import assert_true
+
 import estimation.estimation as est
-import estimation.naive_sampling as nsampl
 
-
-import numpy as np
 
 def test_compute_count_mat():
     """Testing computation of count matrix"""
