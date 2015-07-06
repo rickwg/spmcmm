@@ -99,7 +99,9 @@ def compute_init_value(i_count_mat):
     x0 = np.dot(np.diag(stationary_dist), T_temp)
     del T_temp
 
-    return x0
+    # hence to satisfy detailed balance condition
+    # we force symmetry
+    return 0.5 * (x0 + x0.T)
 
 def estimate_transition_matrix(i_count_mat, i_max_iter, i_tol):
     """
@@ -117,7 +119,7 @@ def estimate_transition_matrix(i_count_mat, i_max_iter, i_tol):
     est_trans_mat : numpy.array
 
     """
-    n = i_count_mat.shape[0]
+    dim_c_mat = i_count_mat.shape
     numerator = i_count_mat + i_count_mat.T
 
     non_zero_idx = (0 != numerator)
@@ -127,24 +129,25 @@ def estimate_transition_matrix(i_count_mat, i_max_iter, i_tol):
     x0 = compute_init_value(i_count_mat)
 
     x = x0.copy()
+    x_old = x
     del x0
 
     it = 0
+    tol = 1e10
     denominator = np.zeros(x.shape, dtype=np.float64)
 
-    while it < i_max_iter:
+    while it < i_max_iter:# and tol > i_tol:
         x_row_sum = np.sum(x, axis=1)
 
         # q_i = c_i / x_i
         q_i = count_mat_row_sum / x_row_sum
 
-        for i in xrange(n):
-            for j in xrange(n):
-                denominator[i, j] = q_i[i] + q_i[j]
+        for i in xrange(dim_c_mat[0]):
+            denominator[i, :] = q_i[i] + q_i[:]
         x[non_zero_idx] = numerator[non_zero_idx] / denominator[non_zero_idx]
-
+        # tol = np.linalg.norm(x - x_old, ord='fro')
         it += 1
 
-    est_trans_mat = x / np.sum(x, axis=1)
+    est_trans_mat = x / np.sum(x, axis=1)[:, np.newaxis]
     return est_trans_mat
 
