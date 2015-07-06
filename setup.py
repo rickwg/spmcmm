@@ -9,5 +9,5 @@ setup(
     setup_requires=['numpy>=1.7.1'],
     tests_require=['numpy>=1.7.1', 'nose>=1.3'],
     install_requires=['numpy>=1.7.1', 'scipy'],
-    packages=['clustering', 'estimation', 'analysis'],
+    packages=['clustering', 'estimation', 'analysis', 'matplotlib'],
     test_suite='nose.collector')
