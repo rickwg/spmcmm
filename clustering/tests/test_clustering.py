@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from edit import kMeans
+from clustering.edit import kMeans
 
 
 class TestKmeans(unittest.TestCase):
