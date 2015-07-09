@@ -5,14 +5,22 @@ import numpy as np
 import tools
 
 class MarkovModel():
-	def __init__(self, T, lagtime = 1.):
-
-		self.T = T
-		try:
-			assert type(self.T) == np.ndarray
-		except:
-			raise TypeError('Matrix is not a ndarray')
-		if self.is_transition_matrix() and self.is_irreducible():
+	def __init__(self, T, lagtime = 1., test=False):
+		if not test:
+			self.T = T
+			try:
+				assert type(self.T) == np.ndarray
+			except:
+				raise TypeError('Matrix is not a ndarray')
+			if self.is_transition_matrix() and self.is_irreducible():
+				self.lagtime = float(lagtime)
+				self.timeScales = None
+				self.statDist = None
+				self.eigVal = None
+				self.eigVec = None
+				self.pcca = None
+		else:
+			self.T = T
 			self.lagtime = float(lagtime)
 			self.timeScales = None
 			self.statDist = None
@@ -68,7 +76,6 @@ class MarkovModel():
 
 		#sort decreasingly the eigen vectors with respect to the eigen values
 		self.eigVal, self.eigVec = zip(*sorted(zip(*[eigVal,eigVec]), reverse=True))
-
 		return self.eigVal, self.eigVec
 
 
@@ -83,7 +90,7 @@ class MarkovModel():
 		vector of the stationnary distribution 
 		'''
 		eigVal, eigVec = np.linalg.eig(self.T)
-		self.statDist = eigVec[np.where(np.isclose(eigVal,1))]
+		self.statDist = eigVec[np.where(np.isclose(eigVal,1))].flatten()
 		return self.statDist
 
 	def timescales(self, lagtime = 1.0):
@@ -100,6 +107,9 @@ class MarkovModel():
 		else:
 			lagt = lagtime
 
+		if self.eigVal == None:
+			self.eigenVectors()
+
 		realEigVal = np.real(self.eigVal)
 		self.timeScales = np.zeros(realEigVal.shape)
 
@@ -115,27 +125,26 @@ class MarkovModel():
 	def PCCA(self, m):
 		'''Use pyemma pcca '''		
 		from pyemma.msm.analysis import pcca
-		self.pcca = pcca_memberships(self.T, m)
+		self.pcca = pcca(self.T, m)
 		return self.pcca
 
 
 class TPT():
 	def __init__(self, T, a, b):
-		try: 
-			assert MarkovModel(T).is_transition_matrix()
+		MarkovModel(T).is_transition_matrix() # Let's raise the exceptions in the is_transition_matrix() function
+		MarkovModel(T).is_irreducible()	# Let's raise the exceptions in the is_irreducible() function
+		
+		try:	# The two subsets A & B checked for transition
 			assert type(a) == list
 			assert type(b) == list
-			ax = set(a)
-			bx = set(b)
+			ax,bx = set(a),set(b)
 			assert len(ax.intersection(bx)) == 0
-		except Exception, e:
-			# Let's raise the exceptions in the is_transition_matrix() function
-			raise e
-		# The two subsets A & B checked for transition
+		except:
+			raise Error('sets are not disjoints')
 		self.T = T
 		self.a = a
 		self.b = b
-
+ 
 		# Properties
 		self.forwardCommit = None
 		self.backwardCommit = None
@@ -144,6 +153,7 @@ class TPT():
 		self.transitionRate = None
 		self.meanFirstPassageTime = None
 		self.statDist = None
+		self.flux = None
 
 	def forwardCommittor(self):
 		from scipy.linalg import solve
@@ -172,7 +182,7 @@ class TPT():
 				d[i] = 1
 
 		#solve the equation
-		self.forwardCommit = solve(G,d)
+		self.forwardCommit = solve(G,d).flatten()
 		return self.forwardCommit
 
 	def backwardCommittor(self):
@@ -202,7 +212,7 @@ class TPT():
 				d[i] = 1
 
 		#solve the equation
-		self.backwardCommit = solve(G,d)
+		self.backwardCommit = solve(G,d).flatten()
 		return self.backwardCommit
 
 	def probabilityCurrent(self):
@@ -212,25 +222,30 @@ class TPT():
 
 		# create a zero diagonal that will put to zero all the i==j cases
 		probaCurrent_ii = np.ones(self.T.shape)-np.eye(self.T.shape[0])
+		if self.forwardCommit == None:
+			self.forwardCommittor()
+		if self.backwardCommit == None:
+			self.backwardCommittor()
+		if self.statDist == None:
+			self.statDistribution = MarkovModel(self.T)
 		
 		# compute stationnary distribution
 		self.statDist = MarkovModel(self.T).statDistribution()
-		self.probaCurrent = (((self.T*self.forwardCommit).T*self.backwardCommit)*self.statDist)*probaCurrent_ii
+		self.probaCurrent = ((((self.T*self.forwardCommit).T*self.backwardCommit)*self.statDist)*probaCurrent_ii).T
 		return self.probaCurrent
 
 	def effectiveProbabilityCurrent(self):
 		'''
 		Compute and return the effective probability current
 		'''
-
+		if self.probaCurrent == None:
+			self.probabilityCurrent()
 		# initialise effective probability current
 		self.effectiveProbaCurrent = np.zeros(self.T.shape)
-
 		# indices of where probability current [i,j] > probability current [j,i]
-		indSup = np.where(self.probaCurrent > np.array(self.probaCurrent).T)
+		indSup = zip(*np.where(self.probaCurrent - np.array(self.probaCurrent).T >= 0))
 		# indices of where probability current [i,j] < probability current [j,i]
-		indInf = np.where(self.probaCurrent < np.array(self.probaCurrent).T)
-
+		indInf = zip(*np.where(self.probaCurrent - np.array(self.probaCurrent).T < 0))
 		for i in indSup:
 			self.effectiveProbaCurrent[i] = self.probaCurrent[i] - self.probaCurrent[i[::-1]]
 			self.effectiveProbaCurrent[i[::-1]] = 0
@@ -239,24 +254,30 @@ class TPT():
 			self.effectiveProbaCurrent[i[::-1]] = self.probaCurrent[i[::-1]] - self.probaCurrent[i]
 		return self.effectiveProbaCurrent
 
-	def flux(self):
+	def filux(self):
 		'''
 		Compute and return the flux = "Average total number of trajectories from A to B per time unit"
 		'''
-		self.flux = np.sum([np.sum(self.probaCurrent[x]) for x in self.a])
+		if self.effectiveProbaCurrent == None:
+			self.effectiveProbabilityCurrent()
+		self.flux = np.sum([np.sum(self.effectiveProbaCurrent[x]) for x in self.a])
 		return self.flux
 
-	def transitionRate(self):
+	def transitionrate(self):
 		'''
 		Compute and return the transition rate = (Flux)/(Total number of trajectories going forward from A)
 		'''
+		if self.flux == None:
+			self.filux()
 		self.transitionRate = self.flux/np.sum(self.statDist*self.backwardCommit)
 		return self.transitionRate
 
-	def meanFirstPassageTime(self):
+	def meanfirstpassagetime(self):
 		'''
 		Compute and return the mean first passage time = inverse of transition rate
 		'''
+		if self.transitionRate == None:
+			self.transitionrate()
 		self.meanFirstPassageTime = self.transitionRate**(-1)
 		return self.meanFirstPassageTime
 
@@ -265,6 +286,8 @@ class TPT():
 		Compute and return the min-current (capacity) of a pathway w
 		'''
 		from itertools import product
+		if self.effectiveProbaCurrent == None:
+			self.effectiveProbabilityCurrent()
 		try:
 			assert w[0] in self.a
 			assert w[-1] in self.b
