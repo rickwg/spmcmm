@@ -1,7 +1,8 @@
 import numpy as np
+import random
 
 class kMeans:
-    def __init__(self, data, k):
+    def __init__(self, data, k=1):
         """Parameters
         ----------
         X :a NxD matrix.
@@ -17,16 +18,15 @@ class kMeans:
         self.maxiter = 5000
         self.k = k
         self.data = data
+        self.centerIsSet = False
 
 
     def __random_centers(self):
         """Using the forgy method to chose firstly the initial k centers randomly from N samples.
         kcenters:a kxD matrix to instore the first k centers."""
-        N,D = self.data.shape
-        kcenters = np.zeros((self.k, D))
-        for i in xrange(self.k):
-            idx = int(np.random.uniform(0, N))
-            kcenters[i, :] = self.data[idx, :]
+        kcenters = random.sample(self.data[:, :], self.k)
+        kcenters = np.asarray(kcenters)
+        print kcenters
         return kcenters
 
     def set_maxiter(self ,maxiter):
@@ -34,6 +34,8 @@ class kMeans:
 
     def set_centers(self ,centers):
         self.centers = centers
+        self.centerIsSet = True
+        _, self.k = centers.shape
 
     def get_centers(self):
         return self.centers
@@ -46,7 +48,7 @@ class kMeans:
     def discretize(self):
         clusterChanged = True
         N,D = self.data.shape
-        if (self.centers == np.zeros((self.k, D))).all():
+        if self.centerIsSet is False:
              #self.centers = np.asarray([self.data[np.random.randint(0, len(self.data))] for _ in xrange(k)], dtype=np.float32)
 		     self.centers = self.__random_centers()
 
@@ -68,10 +70,12 @@ class kMeans:
                         minIdx = j
 
                 if self.labels[i, 0] != minIdx:
-                    clusterChanged = True
+                    if self.centerIsSet is False:
+                        clusterChanged = True
                     self.labels[i, 0] = minIdx
             #the 2nd step of iteration,calculate the mean value of each labelled group
             #as new center.
-            for i in range(self.k):
-                pointsInCluster = self.data[np.nonzero(self.labels[:, 0]== i)[0]]
-                self.centers[i, :] = np.mean(pointsInCluster, axis=0)
+            if self.centerIsSet is False:
+                for i in range(self.k):
+                    pointsInCluster = self.data[np.nonzero(self.labels[:, 0] == i)[0]]
+                    self.centers[i, :] = np.mean(pointsInCluster, axis=0)
