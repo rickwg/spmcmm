@@ -1,7 +1,5 @@
 import numpy as np
-import estimation as est
-import scipy.linalg as lina
-
+import estimation.estimation as est
 import naive_sampling as nsampl
 
 
@@ -20,16 +18,10 @@ c_mat2 = est.compute_count_matrix_list(chain_list)
 # estimate transition matrix
 t_mat = est.estimate_transition_matrix(c_mat, 100000, 1e-3)
 
-eval, evec_left, evec_right = lina.eig(t_mat, left=True)
-
-# sort eigenvalues descending
-idx = eval.argsort()[::-1]
-stationary_dist = evec_left[:, idx[0]].real
-
-S = np.dot(np.diag(stationary_dist), t_mat)
+reversible_check = est.check_reversibility(t_mat)
 
 print c_mat
 print t_mat
 print np.sum(t_mat, axis=1)
 print np.linalg.norm(t_mat - trans_mat, ord='fro') / np.linalg.norm(trans_mat, ord='fro')
-print S
+print reversible_check
