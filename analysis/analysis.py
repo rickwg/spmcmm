@@ -1,43 +1,53 @@
 #!/usr/bin/python
 
+import sys
 import numpy as np
-from tools import communication_classes, depth_first_search
+import tools
 
 class MarkovModel():
 	def __init__(self, T, lagtime = 1.):
 
 		self.T = T
 		try:
-			assert self.is_transition_matrix()
 			assert type(self.T) == np.ndarray
-		except Exception, e:
-			print e
-		
-		self.lagtime = float(lagtime)
-		self.timeScales = None
-		self.statDist = None
-		self.eigVal = None
-		self.eigVec = None
-		self.pcca = None
+		except:
+			raise TypeError('Matrix is not a ndarray')
+		if self.is_transition_matrix() and self.is_irreducible():
+			self.lagtime = float(lagtime)
+			self.timeScales = None
+			self.statDist = None
+			self.eigVal = None
+			self.eigVec = None
+			self.pcca = None
 
 	def is_transition_matrix(self):
 		'''
 		Check if the given matrix is a transition matrix
 		'''
-		try:
-			assert len(self.T.shape) == 2				# 2D matrix
-			assert self.T.shape[0] == self.T.shape[1]	# Square matrix
-			assert (self.T >= 0).all()					# All positive
-			assert np.sum(P, axis=1) == [1]*P.shape[0]	# Sum of rows = 1
-			return True
-		except:
+		if len(self.T.shape)  != 2 :	# check matrix is 2D
+			raise Exception('not a 2D matrix')
 			return False
+		if self.T.shape[0] != self.T.shape[1]:	# check matrix is square
+			raise Exception('matrix is not square')
+			return False	
+		if np.any(self.T<0):
+			raise Exception('matrix terms are not all positive')
+			return False
+		if (np.sum(self.T, axis=1) != 1.).all():
+			raise Exception('sum of raw term is not 1')	# Sum of rows is equal to 1
+			return False
+		else:
+			return True 
 
 	def is_irreducible(self):
 		'''
 		Check if a matrix is irreducible
 		'''
-		return len(communication_classes(self.T)) == 1
+		if len(tools.communication_classes(self.T)) != 1 :
+			raise Exception('matrix is not irreducible')
+			return False
+		else:
+			return True	
 
 	def eigenVectors(self):
 		'''
@@ -76,7 +86,7 @@ class MarkovModel():
 		self.statDist = eigVec[np.where(np.isclose(eigVal,1))]
 		return self.statDist
 
-	def timescales(self):
+	def timescales(self, lagtime = 1.0):
 		'''
 		Compute and return the time scales of a transition matrix T
 		lagtime = 1. default
@@ -85,6 +95,11 @@ class MarkovModel():
 		-------
 		timeScales
 		'''
+		if self.lagtime:
+			lagt = self.lagtime
+		else:
+			lagt = lagtime
+
 		realEigVal = np.real(self.eigVal)
 		self.timeScales = np.zeros(realEigVal.shape)
 
@@ -93,25 +108,26 @@ class MarkovModel():
 			if np.isclose((realEigVal[j]-1.)**2,0):
 				self.timeScales[j] = np.inf
 			else:
-				self.timeScales[j] = -self.lagtime / np.log(np.absolute(realEigVal[j]))
+				self.timeScales[j] = -lagt / np.log(np.absolute(realEigVal[j]))
 		return self.timeScales
 
 
-	def pcca(self, m):
-		'''Use pyemma pcca '''
-		import pcca as pyemma_pcca
-		self.pcca = pyemma_pcca(self.T, m)
+	def PCCA(self, m):
+		'''Use pyemma pcca '''		
+		from pyemma.msm.analysis import pcca
+		self.pcca = pcca_memberships(self.T, m)
 		return self.pcca
 
 
 class TPT():
 	def __init__(self, T, a, b):
 		try: 
-			assert is_transition_matrix(T)
-			# A & B disjunct
-			assert len(a.intersection(b)) == 0
+			assert MarkovModel(T).is_transition_matrix()
 			assert type(a) == list
 			assert type(b) == list
+			ax = set(a)
+			bx = set(b)
+			assert len(ax.intersection(bx)) == 0
 		except Exception, e:
 			# Let's raise the exceptions in the is_transition_matrix() function
 			raise e
@@ -147,10 +163,10 @@ class TPT():
 		G = np.eye(n)
 		for i in range(n):
 			if i not in self.a and i not in self.b:
-				W[i] = L[i]
+				G[i] = L[i]
 		
 		#right part of the equation
-		d = np.zeros(1,n)
+		d = np.zeros((n,1))
 		for i in range(n):
 			if i in self.b:
 				d[i] = 1
@@ -177,12 +193,12 @@ class TPT():
 		G = np.eye(n)
 		for i in range(n):
 			if i not in self.a and i not in self.b:
-				W[i] = L[i]
+				G[i] = L[i]
 		
 		#right part of the equation
-		d = np.zeros(1,n)
+		d = np.zeros((n,1))
 		for i in range(n):
-			if i in self.b:
+			if i in self.a:
 				d[i] = 1
 
 		#solve the equation
@@ -195,13 +211,11 @@ class TPT():
 		'''
 
 		# create a zero diagonal that will put to zero all the i==j cases
-		probaCurrent_ii = np.ones(self.T.shape)-np.eye(self.T.shape)
+		probaCurrent_ii = np.ones(self.T.shape)-np.eye(self.T.shape[0])
 		
 		# compute stationnary distribution
 		self.statDist = MarkovModel(self.T).statDistribution()
-
-		picucu = np.kron(self.statDist*self.backwardCommit, self.forwardCommit)
-		self.probaCurrent = np.dot(picucu.reshape(self.T.shape)*self.T, probaCurrent_ii)
+		self.probaCurrent = (((self.T*self.forwardCommit).T*self.backwardCommit)*self.statDist)*probaCurrent_ii
 		return self.probaCurrent
 
 	def effectiveProbabilityCurrent(self):
@@ -229,7 +243,7 @@ class TPT():
 		'''
 		Compute and return the flux = "Average total number of trajectories from A to B per time unit"
 		'''
-		self.flux = np.sum([np.sum(self.probabilityCurrent[x]) for x in self.a])
+		self.flux = np.sum([np.sum(self.probaCurrent[x]) for x in self.a])
 		return self.flux
 
 	def transitionRate(self):
