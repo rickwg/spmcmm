@@ -50,7 +50,7 @@ def communication_classes(P):
 	communication classes of the transition matrix P
 	"""
 
-	node_list = [s]
+	node_list = []
 	communication_classes = []
 	n_nodes = P.shape[0]
 
