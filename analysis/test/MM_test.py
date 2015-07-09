@@ -5,7 +5,7 @@ from analysis import MarkovModel
 class TestAnalysis(unittest.TestCase):
     def test_eigenVectors(self):
         '''
-        Test the computation of the eigen values of a transition matrix
+        test computation of eigen vector's function
         '''
         T = np.array([[1,0,0],[0,3,0],[0,0,4]])
         eVec_th = np.array([[1.,0.,0.], [0.,1.,0.],[0.,0.,1.]])
@@ -18,7 +18,7 @@ class TestAnalysis(unittest.TestCase):
 
     def test_eigenValues(self):
         '''
-        Test the computation of the eigen values of a transition matrix
+        test computation of eigen values's function
         '''
         T = np.array([[1,0,2],[0,3,1],[0,0,-4]])
         eVal_th = sorted([1.,3.,-4.])
@@ -27,7 +27,7 @@ class TestAnalysis(unittest.TestCase):
 
     def test_timescales(self):
         '''
-        Test the implementation of timescales
+        test computation of timescales
         '''
         T = np.array([[1,0,0],[0,3,0],[0,0,4]])
 
@@ -35,6 +35,17 @@ class TestAnalysis(unittest.TestCase):
         timescales_th = sorted(np.array([np.inf, -1./np.log(3), -1./np.log(4)]))
         
         self.assertTrue(np.allclose(timescales_an, timescales_th, rtol=1.e-5))
+
+    def test_statDistribution(self):
+        '''
+        Test computation of the statDistribution function  
+        '''
+        check_mat = np.array([[1,0,0],[0,3,0],[0,0,4]])
+        check_statDist = [1.,0.,0.]
+        our_stat = MarkovModel(check_mat,test=True).statDistribution()
+        print our_stat
+        self.assertTrue(np.all(check_statDist == our_stat))
+    
 
 if __name__ == '__main__':
     unittest.main()
