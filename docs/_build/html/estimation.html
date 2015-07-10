@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>MCMM Estimation Module &mdash; spscicomp beta documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="spscicomp beta documentation" href="index.html"/>
+        <link rel="next" title="MCMM Analysis Modul" href="analysis.html"/>
+        <link rel="prev" title="MCMM Clustering Module" href="clustering.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> spscicomp</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">MCMM Clustering Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-edit">Edit</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">MCMM Estimation Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-estimation">Estimation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">MCMM Analysis Modul</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="analysis.html#module-analysis">Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.html#module-tools">Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dataImporter.html">Data Importer Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dataImporter.html#module-simpleDataImporter">SimpleDataImporter</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">spscicomp</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>MCMM Estimation Module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/estimation.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="mcmm-estimation-module">
+<h1>MCMM Estimation Module<a class="headerlink" href="#mcmm-estimation-module" title="Permalink to this headline">¶</a></h1>
+<p>The implementation of the estimation of reversible transition matrices.</p>
+<div class="section" id="module-estimation">
+<span id="estimation"></span><h2>Estimation<a class="headerlink" href="#module-estimation" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="estimation.check_reversibility">
+<code class="descclassname">estimation.</code><code class="descname">check_reversibility</code><span class="sig-paren">(</span><em>i_trans_mat</em><span class="sig-paren">)</span><a class="headerlink" href="#estimation.check_reversibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate transition matrix with detailed balance condition,
+i.e for reversible transition matrices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>i_trans_mat</strong> (<em>numpy.array, estimated transition matrix (hopefully reversible)</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>check</strong></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="estimation.compute_count_matrix">
+<code class="descclassname">estimation.</code><code class="descname">compute_count_matrix</code><span class="sig-paren">(</span><em>i_chain</em>, <em>i_tau=1</em><span class="sig-paren">)</span><a class="headerlink" href="#estimation.compute_count_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute count matrix of a markov chain</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>i_chain</strong> (<em>numpy.array that contains a discrete markov chain</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>count_matrix</strong></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="estimation.compute_count_matrix_list">
+<code class="descclassname">estimation.</code><code class="descname">compute_count_matrix_list</code><span class="sig-paren">(</span><em>i_chain_list</em>, <em>i_tau=1</em><span class="sig-paren">)</span><a class="headerlink" href="#estimation.compute_count_matrix_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute count matrix of a list of markov chains</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>i_chain_list</strong> (<em>list of numpy.arrays which contains discrete markov chains</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>count_matrix</strong></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="estimation.compute_init_value">
+<code class="descclassname">estimation.</code><code class="descname">compute_init_value</code><span class="sig-paren">(</span><em>i_count_mat</em><span class="sig-paren">)</span><a class="headerlink" href="#estimation.compute_init_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function. Computes a initial value for estimation of
+transition matrix</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>i_count_mat</strong> (<em>numpy.array</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>est_trans_mat</strong></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="estimation.estimate_transition_matrix">
+<code class="descclassname">estimation.</code><code class="descname">estimate_transition_matrix</code><span class="sig-paren">(</span><em>i_count_mat</em>, <em>i_max_iter</em>, <em>i_tol</em><span class="sig-paren">)</span><a class="headerlink" href="#estimation.estimate_transition_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate transition matrix with detailed balance condition,
+i.e for reversible transition matrices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>i_count_mat</strong> (<em>numpy.array, count matrix</em>) &#8211; </li>
+<li><strong>i_max_iter</strong> (<em>float, max number of iterations</em>) &#8211; </li>
+<li><strong>i_tol</strong> (<em>float, tolerance</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>est_trans_mat</strong></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="estimation.estimate_transition_matrix_naive">
+<code class="descclassname">estimation.</code><code class="descname">estimate_transition_matrix_naive</code><span class="sig-paren">(</span><em>i_count_mat</em><span class="sig-paren">)</span><a class="headerlink" href="#estimation.estimate_transition_matrix_naive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate transition matrix</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>i_count_mat</strong> (<em>numpy.array</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>est_trans_mat</strong></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="analysis.html" class="btn btn-neutral float-right" title="MCMM Analysis Modul">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="clustering.html" class="btn btn-neutral" title="MCMM Clustering Module"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, The Project Group.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'beta',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

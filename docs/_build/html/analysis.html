@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>MCMM Analysis Modul &mdash; spscicomp beta documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="spscicomp beta documentation" href="index.html"/>
+        <link rel="next" title="Data Importer Module" href="dataImporter.html"/>
+        <link rel="prev" title="MCMM Estimation Module" href="estimation.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> spscicomp</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">MCMM Clustering Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-edit">Edit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="estimation.html">MCMM Estimation Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="estimation.html#module-estimation">Estimation</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">MCMM Analysis Modul</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-analysis">Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-tools">Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dataImporter.html">Data Importer Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dataImporter.html#module-simpleDataImporter">SimpleDataImporter</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">spscicomp</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>MCMM Analysis Modul</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/analysis.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="mcmm-analysis-modul">
+<h1>MCMM Analysis Modul<a class="headerlink" href="#mcmm-analysis-modul" title="Permalink to this headline">¶</a></h1>
+<p>The implementation of the MCMM analysis module consists of the following parts:</p>
+<div class="section" id="module-analysis">
+<span id="analysis"></span><h2>Analysis<a class="headerlink" href="#module-analysis" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="analysis.MarkovModel">
+<em class="property">class </em><code class="descclassname">analysis.</code><code class="descname">MarkovModel</code><span class="sig-paren">(</span><em>T</em>, <em>lagtime=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.MarkovModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>MCMM Analysis class.</p>
+<dl class="method">
+<dt id="analysis.MarkovModel.PCCA">
+<code class="descname">PCCA</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.MarkovModel.PCCA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use pyemma pcca</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="analysis.MarkovModel.eigenVectors">
+<code class="descname">eigenVectors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#analysis.MarkovModel.eigenVectors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the eigen values and eigen vectors
+of a transition matrix P and sort them from the biggest
+eigen value to the smallest.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>(eig_val, eig_vec)</em></li>
+<li><strong>eig_val</strong> (<em>(N) list of eigen values</em>)</li>
+<li><strong>eig_vec</strong> (<em>(NxN) ndarray</em>)</li>
+<li><em>array of eigen vectors</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="analysis.MarkovModel.is_irreducible">
+<code class="descname">is_irreducible</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#analysis.MarkovModel.is_irreducible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a matrix is irreducible</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="analysis.MarkovModel.is_transition_matrix">
+<code class="descname">is_transition_matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#analysis.MarkovModel.is_transition_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the given matrix is a transition matrix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="analysis.MarkovModel.statDistribution">
+<code class="descname">statDistribution</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#analysis.MarkovModel.statDistribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute and return the statistical distribution of a
+transition matrix T</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>statDist</strong> (<em>(N) list</em>)</li>
+<li><em>vector of the stationnary distribution</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="analysis.MarkovModel.timescales">
+<code class="descname">timescales</code><span class="sig-paren">(</span><em>lagtime=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.MarkovModel.timescales" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute and return the time scales of a transition matrix T
+lagtime = 1. default</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">timeScales</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-tools">
+<span id="tools"></span><h2>Tools<a class="headerlink" href="#module-tools" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="tools.communication_classes">
+<code class="descclassname">tools.</code><code class="descname">communication_classes</code><span class="sig-paren">(</span><em>P</em><span class="sig-paren">)</span><a class="headerlink" href="#tools.communication_classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform Kosaraju algorithm to find the strongly connected components of
+a directed graph</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>P</strong> (<em>(nxn) ndarray</em>) &#8211; </li>
+<li><strong>matrix</strong> (<em>transition</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>communication_classes</strong> (<em>(n) list</em>)</li>
+<li><em>communication classes of the transition matrix P</em></li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.depth_first_search">
+<code class="descclassname">tools.</code><code class="descname">depth_first_search</code><span class="sig-paren">(</span><em>M</em>, <em>node</em>, <em>node_list</em>, <em>visited_nodes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#tools.depth_first_search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform depth first search algorithm</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>M</strong> (<em>(nxn) ndarray</em>) &#8211; </li>
+<li><strong>matrix</strong> (<em>transition</em>) &#8211; </li>
+<li><strong>node</strong> (<em>int</em>) &#8211; </li>
+<li><strong>of M</strong> (<em>vertex</em>) &#8211; </li>
+<li><strong>node_list</strong> &#8211; </li>
+<li><strong>of visited nodes</strong> (<em>list</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dataImporter.html" class="btn btn-neutral float-right" title="Data Importer Module">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="estimation.html" class="btn btn-neutral" title="MCMM Estimation Module"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, The Project Group.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'beta',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
