@@ -1,6 +1,6 @@
 import numpy as np
 import scipy.linalg as lina
-
+import sys
 
 def compute_count_matrix(i_chain, i_tau=1):
     """
@@ -20,8 +20,12 @@ def compute_count_matrix(i_chain, i_tau=1):
     n_states = i_chain.max() + 1
     count_matrix = np.zeros((n_states, n_states), dtype=np.intc)
 
-    for i in xrange(i_tau, i_chain.shape[0]):
-        count_matrix[i_chain[i - i_tau], i_chain[i]] += 1
+    if 1 <= i_tau < i_chain.shape[0]:
+        for i in xrange(i_tau, i_chain.shape[0]):
+            count_matrix[i_chain[i - i_tau], i_chain[i]] += 1
+    else:
+        raise ValueError("Check the time lag: i_tau = {}".format(i_tau))
+
     return count_matrix
 
 def compute_count_matrix_list(i_chain_list, i_tau=1):
@@ -47,8 +51,12 @@ def compute_count_matrix_list(i_chain_list, i_tau=1):
     n_states = max_num + 1
     count_matrix = np.zeros((n_states, n_states), dtype=np.intc)
 
-    for i in xrange(len_chain):
-        count_matrix += compute_count_matrix(i_chain_list[i], i_tau)
+    if 1 <= i_tau < len_chain:
+        for i in xrange(len_chain):
+            count_matrix += compute_count_matrix(i_chain_list[i], i_tau)
+    else:
+        raise ValueError("Check the time lag: i_tau = {}".format(i_tau))
+
     return count_matrix
 
 
@@ -103,7 +111,7 @@ def compute_init_value(i_count_mat):
     # we force symmetry
     return 0.5 * (x0 + x0.T)
 
-def estimate_transition_matrix(i_count_mat, i_max_iter, i_tol):
+def estimate_transition_matrix(i_count_mat, i_max_iter=10000, i_tol=1e-10):
     """
     Estimate transition matrix with detailed balance condition,
     i.e for reversible transition matrices
@@ -126,17 +134,17 @@ def estimate_transition_matrix(i_count_mat, i_max_iter, i_tol):
     count_mat_row_sum = np.sum(i_count_mat, axis=1)
 
     # compute initial value x0
-    x0 = compute_init_value(i_count_mat)
+    # x0 = compute_init_value(i_count_mat)
+    x0 = estimate_transition_matrix_naive(i_count_mat)
 
     x = x0.copy()
-    x_old = x
     del x0
+    x_old = 1e+3 * np.ones(x.shape, dtype=np.float64)
 
     it = 0
-    tol = 1e10
     denominator = np.zeros(x.shape, dtype=np.float64)
 
-    while it < i_max_iter:# and tol > i_tol:
+    while it < i_max_iter and not np.allclose(x_old, x, rtol=i_tol):
         x_row_sum = np.sum(x, axis=1)
 
         # q_i = c_i / x_i
@@ -145,11 +153,18 @@ def estimate_transition_matrix(i_count_mat, i_max_iter, i_tol):
         for i in xrange(dim_c_mat[0]):
             denominator[i, :] = q_i[i] + q_i[:]
         x[non_zero_idx] = numerator[non_zero_idx] / denominator[non_zero_idx]
-        # tol = np.linalg.norm(x - x_old, ord='fro')
+
+        x_old = x
         it += 1
 
     est_trans_mat = x / np.sum(x, axis=1)[:, np.newaxis]
-    return est_trans_mat
+
+    check, S = check_reversibility(est_trans_mat)
+    if check:
+        return est_trans_mat
+    else:
+        raise RuntimeWarning("Estimated transition matrix does not fulfill the reversibility condition.")
+
 
 def check_reversibility(i_trans_mat):
     """
