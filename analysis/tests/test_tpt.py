@@ -1,6 +1,6 @@
 import numpy as np
 import unittest
-from analysis import TPT
+from analysis.analysis import TPT
 
 class TestTPT(unittest.TestCase):
     def test_forwardCommittor(self):
