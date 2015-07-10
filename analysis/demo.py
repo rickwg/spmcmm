@@ -1,4 +1,5 @@
 import analysis as an
+import numpy as np
 
 T = np.array(
 [[ 0.22236564,0.15408099,0.2150307,0.17571315,0.23280952],
