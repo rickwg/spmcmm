@@ -3,20 +3,21 @@ import random
 from scipy.spatial import distance
 
 class kMeans:
+    """
+    Class for K-Means calculation
+
+    Parameters
+    ----------
+    data : numpy.array that contains a D dimensional time series
+    k : int, default: 1 -  the number of clusters to generate
+    maxiter: int, default: 1000 - Maximum number of iterations
+
+    Returns
+    -------
+    centers : numpy.array with the calculated centers
+    labels : numpy.array with lables of each point
+    """
     def __init__(self, data, k=1, maxiter = 1000):
-        """
-        Class for K-Means calculation
-        Parameters
-        ----------
-        data : numpy.array that contains a D dimensional time series
-        k : int, default: 1 -  the number of clusters to generate
-        maxiter: int, default: 1000 - Maximum number of iterations
-
-        -------
-        centers : numpy.array with the calculated centers
-        labels : numpy.array with lables of each point
-        """
-
         N, D = data.shape
         self.centers = np.zeros((k, D))
         self.labels = np.zeros((N, 1))
@@ -25,10 +26,10 @@ class kMeans:
         self.data = data
         self.centerIsSet = False
 
-
     def __random_centers(self):
         """
-        Compute initial k centers rondomly
+        Compute initial k centers randomly
+
         Parameters
         ----------
 
@@ -54,10 +55,10 @@ class kMeans:
     def get_labels(self):
         return self.labels
 
-
     def discretize(self):
         """
         the main function to group all samples into k sets
+
         Parameters
         ----------
 
@@ -69,7 +70,7 @@ class kMeans:
         clusterChanged = True
         N,D = self.data.shape
         if self.centerIsSet is False:
-		     self.centers = self.__random_centers()
+            self.centers = self.__random_centers()
 
         iter = 0
         k = self.k
