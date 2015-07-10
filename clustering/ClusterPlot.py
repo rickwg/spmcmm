@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 def plot_all2D(data, labels, centers=None):
     """
     plots every possible 2D projection of the Data
+
     Parameters
     ----------
     data : numpy.array that contains a D dimensional time series
@@ -27,6 +28,7 @@ def plot_all2D(data, labels, centers=None):
 def plot_center(centers):
     """
     plots the centers only
+
     Parameters
     ----------
     centers: numpy.array that contains the centers
@@ -46,6 +48,7 @@ def plot_center(centers):
 def plot_2D(a, b, data, labels, centers=None):
     """
     plots one 2D projection of the Data
+
     Parameters
     ----------
     a: int that says with column to take for x-axes
