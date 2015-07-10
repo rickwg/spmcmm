@@ -66,6 +66,7 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="">MCMM Clustering Module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-edit">Edit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ClusterPlot">ClusterPlot</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="estimation.html">MCMM Estimation Module</a><ul>
@@ -121,6 +122,116 @@
 <p>The clustering module provides an implementation of the k-means algorithm and consists of the following modules:</p>
 <div class="section" id="module-edit">
 <span id="edit"></span><h2>Edit<a class="headerlink" href="#module-edit" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="edit.kMeans">
+<em class="property">class </em><code class="descclassname">edit.</code><code class="descname">kMeans</code><span class="sig-paren">(</span><em>data</em>, <em>k=1</em>, <em>maxiter=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#edit.kMeans" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for K-Means calculation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>numpy.array that contains a D dimensional time series</em>) &#8211; </li>
+<li><strong>k</strong> (<em>int, default: 1 -  the number of clusters to generate</em>) &#8211; </li>
+<li><strong>maxiter</strong> (<em>int, default: 1000 - Maximum number of iterations</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>centers</strong> (<em>numpy.array with the calculated centers</em>)</li>
+<li><strong>labels</strong> (<em>numpy.array with lables of each point</em>)</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="edit.kMeans.discretize">
+<code class="descname">discretize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#edit.kMeans.discretize" title="Permalink to this definition">¶</a></dt>
+<dd><p>the main function to group all samples into k sets</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>centers</strong> (<em>numpy.array with the calculated centers</em>)</li>
+<li><strong>labels</strong> (<em>numpy.array with lables of each point</em>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-ClusterPlot">
+<span id="clusterplot"></span><h2>ClusterPlot<a class="headerlink" href="#module-ClusterPlot" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="ClusterPlot.plot_2D">
+<code class="descclassname">ClusterPlot.</code><code class="descname">plot_2D</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>data</em>, <em>labels</em>, <em>centers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ClusterPlot.plot_2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>plots one 2D projection of the Data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>a</strong> (<em>int that says with column to take for x-axes</em>) &#8211; </li>
+<li><strong>b</strong> (<em>int that says with column to take for y-axes</em>) &#8211; </li>
+<li><strong>data</strong> (<em>numpy.array that contains a D dimensional time series</em>) &#8211; </li>
+<li><strong>labels</strong> (<em>numpy.array that contains the label of each point for coloring</em>) &#8211; </li>
+<li><strong>centers</strong> (<em>numpy.array, default: None - when centers are handed over they will be also ploted</em>) &#8211; </li>
+<li><strong>-------</strong> &#8211; </li>
+<li><strong>Plot</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ClusterPlot.plot_all2D">
+<code class="descclassname">ClusterPlot.</code><code class="descname">plot_all2D</code><span class="sig-paren">(</span><em>data</em>, <em>labels</em>, <em>centers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ClusterPlot.plot_all2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>plots every possible 2D projection of the Data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>numpy.array that contains a D dimensional time series</em>) &#8211; </li>
+<li><strong>labels</strong> (<em>numpy.array that contains the label of each point for coloring</em>) &#8211; </li>
+<li><strong>centers</strong> (<em>numpy.array, default: None - when centers are handed over they will be also ploted</em>) &#8211; </li>
+<li><strong>-------</strong> &#8211; </li>
+<li><strong>Plot</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ClusterPlot.plot_center">
+<code class="descclassname">ClusterPlot.</code><code class="descname">plot_center</code><span class="sig-paren">(</span><em>centers</em><span class="sig-paren">)</span><a class="headerlink" href="#ClusterPlot.plot_center" title="Permalink to this definition">¶</a></dt>
+<dd><p>plots the centers only</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>centers</strong> (<em>numpy.array that contains the centers</em>) &#8211; </li>
+<li><strong>-------</strong> &#8211; </li>
+<li><strong>Plot</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 

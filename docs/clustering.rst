@@ -8,4 +8,10 @@ Edit
 ====
 .. automodule:: edit
    :members:
+   
+===========
+ClusterPlot
+===========
+.. automodule:: ClusterPlot
+   :members:
 
