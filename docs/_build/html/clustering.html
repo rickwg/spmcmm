@@ -1,0 +1,305 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>MCMM Clustering Module &mdash; spscicomp beta documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="spscicomp beta documentation" href="index.html"/>
+        <link rel="next" title="MCMM Estimation Module" href="estimation.html"/>
+        <link rel="prev" title="Welcome to spscicomp’s documentation!" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> spscicomp</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">MCMM Clustering Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-edit">Edit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ClusterPlot">ClusterPlot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="estimation.html">MCMM Estimation Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="estimation.html#module-estimation">Estimation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">MCMM Analysis Modul</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="analysis.html#module-analysis">Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.html#module-tools">Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dataImporter.html">Data Importer Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dataImporter.html#module-simpleDataImporter">SimpleDataImporter</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">spscicomp</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>MCMM Clustering Module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/clustering.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="mcmm-clustering-module">
+<h1>MCMM Clustering Module<a class="headerlink" href="#mcmm-clustering-module" title="Permalink to this headline">¶</a></h1>
+<p>The clustering module provides an implementation of the k-means algorithm and consists of the following modules:</p>
+<div class="section" id="module-edit">
+<span id="edit"></span><h2>Edit<a class="headerlink" href="#module-edit" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="edit.kMeans">
+<em class="property">class </em><code class="descclassname">edit.</code><code class="descname">kMeans</code><span class="sig-paren">(</span><em>data</em>, <em>k=1</em>, <em>maxiter=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#edit.kMeans" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for K-Means calculation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>numpy.array that contains a D dimensional time series</em>) &#8211; </li>
+<li><strong>k</strong> (<em>int, default: 1 -  the number of clusters to generate</em>) &#8211; </li>
+<li><strong>maxiter</strong> (<em>int, default: 1000 - Maximum number of iterations</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>centers</strong> (<em>numpy.array with the calculated centers</em>)</li>
+<li><strong>labels</strong> (<em>numpy.array with lables of each point</em>)</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="edit.kMeans.discretize">
+<code class="descname">discretize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#edit.kMeans.discretize" title="Permalink to this definition">¶</a></dt>
+<dd><p>the main function to group all samples into k sets</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>centers</strong> (<em>numpy.array with the calculated centers</em>)</li>
+<li><strong>labels</strong> (<em>numpy.array with lables of each point</em>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-ClusterPlot">
+<span id="clusterplot"></span><h2>ClusterPlot<a class="headerlink" href="#module-ClusterPlot" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="ClusterPlot.plot_2D">
+<code class="descclassname">ClusterPlot.</code><code class="descname">plot_2D</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>data</em>, <em>labels</em>, <em>centers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ClusterPlot.plot_2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>plots one 2D projection of the Data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>a</strong> (<em>int that says with column to take for x-axes</em>) &#8211; </li>
+<li><strong>b</strong> (<em>int that says with column to take for y-axes</em>) &#8211; </li>
+<li><strong>data</strong> (<em>numpy.array that contains a D dimensional time series</em>) &#8211; </li>
+<li><strong>labels</strong> (<em>numpy.array that contains the label of each point for coloring</em>) &#8211; </li>
+<li><strong>centers</strong> (<em>numpy.array, default: None - when centers are handed over they will be also ploted</em>) &#8211; </li>
+<li><strong>-------</strong> &#8211; </li>
+<li><strong>Plot</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ClusterPlot.plot_all2D">
+<code class="descclassname">ClusterPlot.</code><code class="descname">plot_all2D</code><span class="sig-paren">(</span><em>data</em>, <em>labels</em>, <em>centers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ClusterPlot.plot_all2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>plots every possible 2D projection of the Data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>numpy.array that contains a D dimensional time series</em>) &#8211; </li>
+<li><strong>labels</strong> (<em>numpy.array that contains the label of each point for coloring</em>) &#8211; </li>
+<li><strong>centers</strong> (<em>numpy.array, default: None - when centers are handed over they will be also ploted</em>) &#8211; </li>
+<li><strong>-------</strong> &#8211; </li>
+<li><strong>Plot</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ClusterPlot.plot_center">
+<code class="descclassname">ClusterPlot.</code><code class="descname">plot_center</code><span class="sig-paren">(</span><em>centers</em><span class="sig-paren">)</span><a class="headerlink" href="#ClusterPlot.plot_center" title="Permalink to this definition">¶</a></dt>
+<dd><p>plots the centers only</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>centers</strong> (<em>numpy.array that contains the centers</em>) &#8211; </li>
+<li><strong>-------</strong> &#8211; </li>
+<li><strong>Plot</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="estimation.html" class="btn btn-neutral float-right" title="MCMM Estimation Module">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to spscicomp’s documentation!"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, The Project Group.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'beta',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
