@@ -1,6 +1,6 @@
 import numpy as np
 import unittest
-from analysis import MarkovModel
+from analysis.analysis import MarkovModel
 
 class TestAnalysis(unittest.TestCase):
     def test_eigenVectors(self):
