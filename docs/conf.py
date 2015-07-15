@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# spscicomp documentation build configuration file, created by
-# sphinx-quickstart2 on Thu Jan 15 18:29:21 2015.
+# spmcmm documentation build configuration file, created by
+# sphinx-quickstart2 on Thu Jul 09 22:15:21 2015.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -55,7 +55,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'spscicomp'
+project = u'spmcmm'
 copyright = u'2015, The Project Group'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -188,7 +188,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'spscicompdoc'
+htmlhelp_basename = 'spmcmmdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -208,7 +208,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'spscicomp.tex', u'spscicomp Documentation',
+  ('index', 'spmcmm.tex', u'spmcmm Documentation',
    u'The Project Group', 'manual'),
 ]
 
@@ -238,7 +238,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'spscicomp', u'spscicomp Documentation',
+    ('index', 'spmcmm', u'spmcmm Documentation',
      [u'The Project Group'], 1)
 ]
 
@@ -252,8 +252,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'spscicomp', u'spscicomp Documentation',
-   u'The Project Group', 'spscicomp', 'One line description of project.',
+  ('index', 'spmcmm', u'spmcmm Documentation',
+   u'The Project Group', 'spmcmm', 'One line description of project.',
    'Miscellaneous'),
 ]
 
